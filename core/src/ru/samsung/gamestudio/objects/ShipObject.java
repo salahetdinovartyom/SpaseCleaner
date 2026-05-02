@@ -1,7 +1,8 @@
 package ru.samsung.gamestudio.objects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import static ru.samsung.gamestudio.GameSettings.*;
 
@@ -9,6 +10,7 @@ public class ShipObject extends GameObject{
 
     public ShipObject(int x, int y, int width, int height,String texturePath, World world) {
         super(texturePath, x, y, width, height, world);
+        body.setLinearDamping(20);
     }
 
     private void putInFrame() {
@@ -29,5 +31,10 @@ public class ShipObject extends GameObject{
     public void draw(SpriteBatch batch) {
         putInFrame();
         super.draw(batch);
+    }
+    public void move(Vector3 vector3) {
+        float fx=(vector3.x-getX())*SHIP_FORCE_RATIO,fy=(vector3.y-getY())*SHIP_FORCE_RATIO;
+        body.applyForceToCenter(new Vector2(fx, fy),true);
+
     }
 }

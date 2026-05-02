@@ -25,11 +25,21 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         MyGdxGame.stepWorld();
+        handleInput();
+        draw();
+    }
 
+    @Override
+    public void dispose() {
+        shipObject.dispose();
+    }
+    private void handleInput() {
         if (Gdx.input.isTouched()) {
             myGdxGame.touch=myGdxGame.camera.unproject(new Vector3(Gdx.input.getX(),Gdx.input.getY(),0));
+            shipObject.move(myGdxGame.touch);
         }
-
+    }
+    private void draw() {
         myGdxGame.camera.update();
         myGdxGame.batch.setProjectionMatrix(myGdxGame.camera.combined);
         ScreenUtils.clear(Color.CLEAR);
@@ -37,10 +47,5 @@ public class GameScreen extends ScreenAdapter {
         myGdxGame.batch.begin();
         shipObject.draw(myGdxGame.batch);
         myGdxGame.batch.end();
-    }
-
-    @Override
-    public void dispose() {
-        shipObject.dispose();
     }
 }

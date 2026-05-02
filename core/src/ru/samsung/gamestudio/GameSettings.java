@@ -13,6 +13,6 @@ public class GameSettings {
     public static final float SCALE = 0.05f;
 
     //Корабль
-    public static final int SHIP_WIDTH=150,SHIP_HEIGHT=150;
+    public static final int SHIP_WIDTH=150,SHIP_HEIGHT=150,SHIP_FORCE_RATIO=10;
 
 }
