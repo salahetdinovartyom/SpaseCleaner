@@ -21,6 +21,9 @@ public class GameObject {
         texture=new Texture(texturePath);
         body=createBody(x,y,world);
     }
+    public void draw(SpriteBatch batch) {
+        batch.draw(texture,getX()-(width/2f),getY()-(height/2f),width,height);
+    }
     public int getX() {
         return (int) (body.getPosition().x/SCALE);
     }
@@ -53,9 +56,6 @@ public class GameObject {
 
         body.setTransform(x*SCALE,y*SCALE,0);
         return body;
-    }
-    public void draw(SpriteBatch batch) {
-        batch.draw(texture,getX()-(width/2f),getY()-(height/2f),width,height);
     }
     public void dispose() {
         texture.dispose();

@@ -1,12 +1,14 @@
 package ru.samsung.gamestudio.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import ru.samsung.gamestudio.MyGdxGame;
 import ru.samsung.gamestudio.objects.ShipObject;
-
+import static ru.samsung.gamestudio.GameResources.*;
 import static ru.samsung.gamestudio.GameSettings.*;
 
 
@@ -15,12 +17,18 @@ public class GameScreen extends ScreenAdapter {
     ShipObject shipObject;
     public GameScreen(MyGdxGame myGdxGame) {
         this.myGdxGame=myGdxGame;
-        shipObject =new ShipObject(SCREEN_WIDTH/2,150,SHIP_WIDTH,SHIP_HEIGHT,SHIP_IMG_PATH,MyGdxGame.world);
+        shipObject =new ShipObject(SCREEN_WIDTH/2,150,
+                SHIP_WIDTH,SHIP_HEIGHT,
+                SHIP_IMG_PATH,MyGdxGame.world);
     }
 
     @Override
     public void render(float delta) {
         MyGdxGame.stepWorld();
+
+        if (Gdx.input.isTouched()) {
+            myGdxGame.touch=myGdxGame.camera.unproject(new Vector3(Gdx.input.getX(),Gdx.input.getY(),0));
+        }
 
         myGdxGame.camera.update();
         myGdxGame.batch.setProjectionMatrix(myGdxGame.camera.combined);

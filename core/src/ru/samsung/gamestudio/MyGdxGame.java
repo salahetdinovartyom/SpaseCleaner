@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -19,6 +20,7 @@ public class MyGdxGame extends Game {
     public static World world;
     GameScreen gameScreen;
     static float accumulator=0f;
+    public Vector3 touch;
 
 	
 	@Override
@@ -32,14 +34,6 @@ public class MyGdxGame extends Game {
         setScreen(gameScreen);
 
 
-	}
-
-	@Override
-	public void render () {
-		ScreenUtils.clear(1, 0, 0, 1);
-		batch.begin();
-
-		batch.end();
 	}
 	
 	@Override
