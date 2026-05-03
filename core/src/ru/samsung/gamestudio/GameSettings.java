@@ -7,7 +7,6 @@ public class GameSettings {
     //Box2D
     public static final float STEP_TIME=1f/60f;
     public static final int VELOCITY_ITERATIONS=6,POSITION_ITERATIONS=6;
-    //Отрисовка
     public static final float SCALE = 0.05f;
     //Корабль
     public static final short SHIP_BIT = 2;

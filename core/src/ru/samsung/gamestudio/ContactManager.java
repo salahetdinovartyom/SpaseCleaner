@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 
 import ru.samsung.gamestudio.objects.GameObject;
+import static ru.samsung.gamestudio.GameSettings.*;
 
 public class ContactManager {
     World world;
@@ -21,7 +22,8 @@ public class ContactManager {
 
                 int cDef=fixA.getFilterData().categoryBits;
                 int cDef2=fixB.getFilterData().categoryBits;
-                if (cDef+cDef2==5||cDef+cDef2==3) {
+
+                if (cDef+cDef2==TRASH_BIT+SHIP_BIT||cDef+cDef2==TRASH_BIT+BULLET_BIT) {
                     // Нет двух пар степеней двойки, которые дают одинаковую сумму,
                     // поэтому вместо того огромного куска кода можно использовать это условие.
                     ((GameObject) fixA.getUserData()).hit();
