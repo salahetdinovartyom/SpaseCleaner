@@ -9,6 +9,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import ru.samsung.gamestudio.ContactManager;
 import ru.samsung.gamestudio.GameSession;
 import ru.samsung.gamestudio.MyGdxGame;
+import ru.samsung.gamestudio.UI.ImageView;
+import ru.samsung.gamestudio.UI.MovingBackgroundView;
 import ru.samsung.gamestudio.objects.BulletObject;
 import ru.samsung.gamestudio.objects.ShipObject;
 import ru.samsung.gamestudio.objects.TrashObject;
@@ -26,6 +28,8 @@ public class GameScreen extends ScreenAdapter {
     ContactManager contactManager;
     ArrayList<TrashObject> trashArray;
     ArrayList<BulletObject> bulletArray;
+    MovingBackgroundView backgroundView;
+    ImageView topBlackoutView;
     public GameScreen(MyGdxGame myGdxGame) {
         this.myGdxGame=myGdxGame;
         gameSession=new GameSession();
@@ -37,6 +41,8 @@ public class GameScreen extends ScreenAdapter {
         shipObject =new ShipObject(SCREEN_WIDTH/2,150,
                 SHIP_WIDTH,SHIP_HEIGHT,
                 SHIP_IMG_PATH,MyGdxGame.world);
+        backgroundView=new MovingBackgroundView(BG_IMG_PATH);
+        topBlackoutView=new ImageView(0,1180,BLACKOUT_TOP_IMG_PATH);
     }
 
     @Override
@@ -48,6 +54,7 @@ public class GameScreen extends ScreenAdapter {
     public void render(float delta) {
         MyGdxGame.stepWorld();
         handleInput();
+        backgroundView.move();
 
         if (gameSession.shouldSpawnTrash()) {
             TrashObject trashObject= new TrashObject(TRASH_WIDTH,TRASH_HEIGHT,
@@ -73,6 +80,10 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         shipObject.dispose();
+        for (TrashObject trash : trashArray) trash.dispose();
+        for (BulletObject bullet : bulletArray) bullet.dispose();
+        backgroundView.dispose();
+        topBlackoutView.dispose();
     }
     private void handleInput() {
         if (Gdx.input.isTouched()) {
@@ -87,9 +98,12 @@ public class GameScreen extends ScreenAdapter {
 
         myGdxGame.batch.begin();
 
+        backgroundView.draw(myGdxGame.batch);
         for (TrashObject trash : trashArray) trash.draw(myGdxGame.batch);
         shipObject.draw(myGdxGame.batch);
         for (BulletObject bullet : bulletArray) bullet.draw(myGdxGame.batch);
+        topBlackoutView.draw(myGdxGame.batch);
+
         myGdxGame.batch.end();
     }
     private void updateTrash() {
