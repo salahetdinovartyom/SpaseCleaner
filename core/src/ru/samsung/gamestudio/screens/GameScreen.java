@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import ru.samsung.gamestudio.ContactManager;
+import ru.samsung.gamestudio.managers.ContactManager;
 import ru.samsung.gamestudio.GameSession;
 import ru.samsung.gamestudio.GameState;
 import ru.samsung.gamestudio.MyGdxGame;
@@ -64,7 +64,7 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void show () {
-        gameSession.startGame();
+        restartGame();
     }
 
     @Override
@@ -107,6 +107,16 @@ public class GameScreen extends ScreenAdapter {
         for (BulletObject bullet : bulletArray) bullet.dispose();
         backgroundView.dispose();
         topBlackoutView.dispose();
+        backgroundView.dispose();
+        topBlackoutView.dispose();
+        liveView.dispose();
+        scoreTextView.dispose();
+        pauseButton.dispose();
+        fullBlackoutView.dispose();
+        homeButton.dispose();
+        continueButton.dispose();
+        pauseTextView.dispose();
+
     }
     private void handleInput() {
         if (Gdx.input.isTouched()) {
@@ -121,6 +131,8 @@ public class GameScreen extends ScreenAdapter {
                 case PAUSED:
                     if (continueButton.isHit(myGdxGame.touch.x,myGdxGame.touch.y))
                         gameSession.resumeGame();
+                    if (homeButton.isHit(myGdxGame.touch.x,myGdxGame.touch.y))
+                        myGdxGame.setScreen(myGdxGame.menuScreen);
                     break;
             }
 
@@ -165,5 +177,22 @@ public class GameScreen extends ScreenAdapter {
                 bulletArray.remove(i--);
             }
         }
+    }
+    private void restartGame() {
+        for (int i=0; i<trashArray.size(); i++) {
+            MyGdxGame.world.destroyBody(trashArray.get(i).body);
+            trashArray.remove(i--);
+        }
+        if (shipObject!=null) {
+            MyGdxGame.world.destroyBody(shipObject.body);
+        }
+        shipObject = new ShipObject(
+                SCREEN_WIDTH / 2, 150,
+                SHIP_WIDTH, SHIP_HEIGHT,
+                SHIP_IMG_PATH,
+                MyGdxGame.world
+        );
+        bulletArray.clear();
+        gameSession.startGame();
     }
 }

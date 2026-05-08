@@ -1,0 +1,22 @@
+package ru.samsung.gamestudio.managers;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
+import static ru.samsung.gamestudio.GameResources.*;
+
+public class AudioManager {
+    public Music backgroundMusic;
+    public Sound shootSound;
+    public Sound explosionSound;
+
+    public AudioManager() {
+        backgroundMusic= Gdx.audio.newMusic(Gdx.files.internal(BACKGROUND_MUSIC_PATH));
+        shootSound=Gdx.audio.newSound(Gdx.files.internal(SHOOT_SOUND_PATH));
+        explosionSound=Gdx.audio.newSound(Gdx.files.internal(DESTROY_SOUND_PATH));
+        backgroundMusic.setVolume(0.1f);
+        backgroundMusic.setLooping(true);
+
+        backgroundMusic.play();
+    }
+}

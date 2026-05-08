@@ -1,27 +1,68 @@
 package ru.samsung.gamestudio.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.ScreenUtils;
 
+import ru.samsung.gamestudio.GameState;
 import ru.samsung.gamestudio.MyGdxGame;
+import ru.samsung.gamestudio.UI.ButtonView;
 import ru.samsung.gamestudio.UI.MovingBackgroundView;
+import ru.samsung.gamestudio.UI.TextView;
+import ru.samsung.gamestudio.objects.BulletObject;
+import ru.samsung.gamestudio.objects.TrashObject;
 
 import static ru.samsung.gamestudio.GameResources.*;
 
 public class MenuScreen extends ScreenAdapter {
     MyGdxGame myGdxGame;
     MovingBackgroundView backgroundView;
+    TextView titleView;
+    ButtonView startButtonView,settingsButtonView,exitButtonView;
     public MenuScreen(MyGdxGame myGdxGame) {
         this.myGdxGame=myGdxGame;
         backgroundView=new MovingBackgroundView(BG_IMG_PATH);
+        titleView=new TextView(myGdxGame.largeWhiteFont,180,960,"Space Cleaner");
+        startButtonView=new ButtonView(140,646,440,70,myGdxGame.commonBlackFont,BUTTON_BACKGROUND_LONG_IMG_PATH,"Start");
+        settingsButtonView=new ButtonView(140,551,440,70,myGdxGame.commonBlackFont,BUTTON_BACKGROUND_LONG_IMG_PATH,"Settings");
+        exitButtonView=new ButtonView(140,456,440,70,myGdxGame.commonBlackFont,BUTTON_BACKGROUND_LONG_IMG_PATH,"Exit");
+
     }
 
     @Override
     public void render(float delta) {
-        super.render(delta);
+        handleInput();
+        myGdxGame.camera.update();
+        myGdxGame.batch.setProjectionMatrix(myGdxGame.camera.combined);
+        ScreenUtils.clear(Color.CLEAR);
+
+        myGdxGame.batch.begin();
+
+        backgroundView.draw(myGdxGame.batch);
+        titleView.draw(myGdxGame.batch);
+        exitButtonView.draw(myGdxGame.batch);
+        settingsButtonView.draw(myGdxGame.batch);
+        startButtonView.draw(myGdxGame.batch);
+
+        myGdxGame.batch.end();
+
+    }
+    private void handleInput() {
+        if (Gdx.input.isTouched()) {
+            myGdxGame.touch=myGdxGame.camera.unproject(new Vector3(Gdx.input.getX(),Gdx.input.getY(),0));
+            if (startButtonView.isHit(myGdxGame.touch.x,myGdxGame.touch.y))
+                myGdxGame.setScreen(myGdxGame.gameScreen);
+            if (exitButtonView.isHit(myGdxGame.touch.x,myGdxGame.touch.y))
+                Gdx.app.exit();
+            if (settingsButtonView.isHit(myGdxGame.touch.x,myGdxGame.touch.y))
+                System.out.println("Go to settings Screen");
+        }
     }
 
     @Override
     public void dispose() {
-        super.dispose();
+
     }
 }
