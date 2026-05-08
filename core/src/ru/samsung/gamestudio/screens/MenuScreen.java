@@ -6,13 +6,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import ru.samsung.gamestudio.GameState;
 import ru.samsung.gamestudio.MyGdxGame;
 import ru.samsung.gamestudio.UI.ButtonView;
 import ru.samsung.gamestudio.UI.MovingBackgroundView;
 import ru.samsung.gamestudio.UI.TextView;
-import ru.samsung.gamestudio.objects.BulletObject;
-import ru.samsung.gamestudio.objects.TrashObject;
 
 import static ru.samsung.gamestudio.GameResources.*;
 
@@ -63,6 +60,10 @@ public class MenuScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-
+        startButtonView.dispose();
+        exitButtonView.dispose();
+        settingsButtonView.dispose();
+        titleView.dispose();
+        backgroundView.dispose();
     }
 }
