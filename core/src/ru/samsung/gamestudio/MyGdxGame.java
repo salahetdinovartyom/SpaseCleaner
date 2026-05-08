@@ -24,6 +24,8 @@ public class MyGdxGame extends Game {
     static float accumulator=0f;
     public Vector3 touch;
     public BitmapFont commonWhiteFont;
+    public BitmapFont commonBlackFont;
+    public BitmapFont largeWhiteFont;
 
 	
 	@Override
@@ -31,13 +33,13 @@ public class MyGdxGame extends Game {
         Box2D.init();
         world=new World(new Vector2(0,0),true);
         commonWhiteFont=FontBuilder.generate(24, Color.WHITE,FONT_PATH);
+        commonBlackFont=FontBuilder.generate(24, Color.BLACK,FONT_PATH);
+        largeWhiteFont=FontBuilder.generate(48, Color.WHITE,FONT_PATH);
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false,GameSettings.SCREEN_WIDTH,GameSettings.SCREEN_HEIGHT);
         gameScreen=new GameScreen(this);
         setScreen(gameScreen);
-
-
 	}
 	
 	@Override

@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import ru.samsung.gamestudio.ContactManager;
 import ru.samsung.gamestudio.GameSession;
+import ru.samsung.gamestudio.GameState;
 import ru.samsung.gamestudio.MyGdxGame;
 import ru.samsung.gamestudio.UI.ButtonView;
 import ru.samsung.gamestudio.UI.ImageView;
@@ -36,6 +37,9 @@ public class GameScreen extends ScreenAdapter {
     LiveView liveView;
     TextView scoreTextView;
     ButtonView pauseButton;
+    ImageView fullBlackoutView;
+    ButtonView homeButton,continueButton;
+    TextView pauseTextView;
     public GameScreen(MyGdxGame myGdxGame) {
         this.myGdxGame=myGdxGame;
         gameSession=new GameSession();
@@ -52,6 +56,10 @@ public class GameScreen extends ScreenAdapter {
         liveView=new LiveView(305,1215);
         scoreTextView=new TextView(myGdxGame.commonWhiteFont,50,1215);
         pauseButton=new ButtonView(605,1200,46,54,PAUSE_IMG_PATH);
+        fullBlackoutView=new ImageView(0,0,FULL_BLACKOUT_IMG_PATH);
+        homeButton=new ButtonView(138,695,200,70,myGdxGame.commonBlackFont,BUTTON_BACKGROUND_SHORT_IMG_PATH,"Home");
+        continueButton=new ButtonView(393,695,200,70,myGdxGame.commonBlackFont, BUTTON_BACKGROUND_SHORT_IMG_PATH,"Continue");
+        pauseTextView=new TextView(myGdxGame.largeWhiteFont,282,842,"Pause");
     }
 
     @Override
@@ -61,30 +69,34 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        MyGdxGame.stepWorld();
+
         handleInput();
-        backgroundView.move();
-        liveView.setLeftLives(shipObject.getLiveLeft());
-        scoreTextView.setText("Score: "+52);
+        if (gameSession.state==GameState.PLAYING) {
 
-        if (gameSession.shouldSpawnTrash()) {
-            TrashObject trashObject= new TrashObject(TRASH_WIDTH,TRASH_HEIGHT,
-                    TRASH_IMG_PATH,MyGdxGame.world);
-            trashArray.add(trashObject);
-        }
-        if (shipObject.needToShoot()) {
-            BulletObject laserBullet=new BulletObject(shipObject.getX(),shipObject.getY()+shipObject.height/2,
-                    BULLET_WIDTH,BULLET_HEIGHT,
-                    BULLET_IMG_PATH,MyGdxGame.world);
-            bulletArray.add(laserBullet);
-        }
-        if (!shipObject.isAlive()) {
-            System.out.println("Game over!");
-        }
 
-        updateTrash();
-        updateBullets();
+            if (gameSession.shouldSpawnTrash()) {
+                TrashObject trashObject = new TrashObject(TRASH_WIDTH, TRASH_HEIGHT,
+                        TRASH_IMG_PATH, MyGdxGame.world);
+                trashArray.add(trashObject);
+            }
+            if (shipObject.needToShoot()) {
+                BulletObject laserBullet = new BulletObject(shipObject.getX(), shipObject.getY() + shipObject.height / 2,
+                        BULLET_WIDTH, BULLET_HEIGHT,
+                        BULLET_IMG_PATH, MyGdxGame.world);
+                bulletArray.add(laserBullet);
+            }
+            if (!shipObject.isAlive()) {
+                System.out.println("Game over!");
+            }
 
+            updateTrash();
+            updateBullets();
+            backgroundView.move();
+            scoreTextView.setText("Score: " + 52);
+            liveView.setLeftLives(shipObject.getLiveLeft());
+
+            MyGdxGame.stepWorld();
+        }
         draw();
     }
 
@@ -99,7 +111,19 @@ public class GameScreen extends ScreenAdapter {
     private void handleInput() {
         if (Gdx.input.isTouched()) {
             myGdxGame.touch=myGdxGame.camera.unproject(new Vector3(Gdx.input.getX(),Gdx.input.getY(),0));
-            shipObject.move(myGdxGame.touch);
+            switch (gameSession.state) {
+                case PLAYING:
+                    if (pauseButton.isHit(myGdxGame.touch.x,myGdxGame.touch.y)) {
+                        gameSession.pauseGame();
+                    }
+                    shipObject.move(myGdxGame.touch);
+                    break;
+                case PAUSED:
+                    if (continueButton.isHit(myGdxGame.touch.x,myGdxGame.touch.y))
+                        gameSession.resumeGame();
+                    break;
+            }
+
         }
     }
     private void draw() {
@@ -117,6 +141,12 @@ public class GameScreen extends ScreenAdapter {
         scoreTextView.draw(myGdxGame.batch);
         liveView.draw(myGdxGame.batch);
         pauseButton.draw(myGdxGame.batch);
+        if (gameSession.state== GameState.PAUSED) {
+            fullBlackoutView.draw(myGdxGame.batch);
+            pauseTextView.draw(myGdxGame.batch);
+            homeButton.draw(myGdxGame.batch);
+            continueButton.draw(myGdxGame.batch);
+        }
 
         myGdxGame.batch.end();
     }
