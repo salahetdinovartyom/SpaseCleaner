@@ -9,8 +9,11 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import ru.samsung.gamestudio.ContactManager;
 import ru.samsung.gamestudio.GameSession;
 import ru.samsung.gamestudio.MyGdxGame;
+import ru.samsung.gamestudio.UI.ButtonView;
 import ru.samsung.gamestudio.UI.ImageView;
+import ru.samsung.gamestudio.UI.LiveView;
 import ru.samsung.gamestudio.UI.MovingBackgroundView;
+import ru.samsung.gamestudio.UI.TextView;
 import ru.samsung.gamestudio.objects.BulletObject;
 import ru.samsung.gamestudio.objects.ShipObject;
 import ru.samsung.gamestudio.objects.TrashObject;
@@ -30,6 +33,9 @@ public class GameScreen extends ScreenAdapter {
     ArrayList<BulletObject> bulletArray;
     MovingBackgroundView backgroundView;
     ImageView topBlackoutView;
+    LiveView liveView;
+    TextView scoreTextView;
+    ButtonView pauseButton;
     public GameScreen(MyGdxGame myGdxGame) {
         this.myGdxGame=myGdxGame;
         gameSession=new GameSession();
@@ -43,6 +49,9 @@ public class GameScreen extends ScreenAdapter {
                 SHIP_IMG_PATH,MyGdxGame.world);
         backgroundView=new MovingBackgroundView(BG_IMG_PATH);
         topBlackoutView=new ImageView(0,1180,BLACKOUT_TOP_IMG_PATH);
+        liveView=new LiveView(305,1215);
+        scoreTextView=new TextView(myGdxGame.commonWhiteFont,50,1215);
+        pauseButton=new ButtonView(605,1200,46,54,PAUSE_IMG_PATH);
     }
 
     @Override
@@ -55,6 +64,8 @@ public class GameScreen extends ScreenAdapter {
         MyGdxGame.stepWorld();
         handleInput();
         backgroundView.move();
+        liveView.setLeftLives(shipObject.getLiveLeft());
+        scoreTextView.setText("Score: "+52);
 
         if (gameSession.shouldSpawnTrash()) {
             TrashObject trashObject= new TrashObject(TRASH_WIDTH,TRASH_HEIGHT,
@@ -103,6 +114,9 @@ public class GameScreen extends ScreenAdapter {
         shipObject.draw(myGdxGame.batch);
         for (BulletObject bullet : bulletArray) bullet.draw(myGdxGame.batch);
         topBlackoutView.draw(myGdxGame.batch);
+        scoreTextView.draw(myGdxGame.batch);
+        liveView.draw(myGdxGame.batch);
+        pauseButton.draw(myGdxGame.batch);
 
         myGdxGame.batch.end();
     }

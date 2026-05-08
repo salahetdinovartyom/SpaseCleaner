@@ -11,9 +11,13 @@ import static ru.samsung.gamestudio.GameSettings.*;
 public class ShipObject extends GameObject{
     long lastShotTime;
     int livesLeft;
+
+    public int getLiveLeft() {
+        return livesLeft;
+    }
     public ShipObject(int x, int y, int width, int height,String texturePath, World world) {
         super(texturePath, x, y, width, height, SHIP_BIT, world);
-        body.setLinearDamping(20);
+        body.setLinearDamping(15);
         livesLeft=3;
     }
 
@@ -51,4 +55,5 @@ public class ShipObject extends GameObject{
     public void hit() {livesLeft--;}
 
     public boolean isAlive() {return livesLeft>0;}
+
 }
