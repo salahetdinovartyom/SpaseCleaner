@@ -9,6 +9,7 @@ public class AudioManager {
     public Music backgroundMusic;
     public Sound shootSound;
     public Sound explosionSound;
+    public boolean isSoundOn,isMusicOn;
 
     public AudioManager() {
         backgroundMusic= Gdx.audio.newMusic(Gdx.files.internal(BACKGROUND_MUSIC_PATH));
@@ -16,7 +17,13 @@ public class AudioManager {
         explosionSound=Gdx.audio.newSound(Gdx.files.internal(DESTROY_SOUND_PATH));
         backgroundMusic.setVolume(0.1f);
         backgroundMusic.setLooping(true);
+        isMusicOn=true;
+        isSoundOn=true;
 
         backgroundMusic.play();
+    }
+    public void updateMusicFlag() {
+        if (isMusicOn) backgroundMusic.play();
+        else backgroundMusic.stop();
     }
 }

@@ -84,9 +84,11 @@ public class GameScreen extends ScreenAdapter {
                         BULLET_WIDTH, BULLET_HEIGHT,
                         BULLET_IMG_PATH, MyGdxGame.world);
                 bulletArray.add(laserBullet);
+
+                if (myGdxGame.audioManager.isMusicOn) myGdxGame.audioManager.shootSound.play();
             }
             if (!shipObject.isAlive()) {
-                System.out.println("Game over!");
+                gameSession.state=GameState.ENDED;
             }
 
             updateTrash();
@@ -96,6 +98,8 @@ public class GameScreen extends ScreenAdapter {
             liveView.setLeftLives(shipObject.getLiveLeft());
 
             MyGdxGame.stepWorld();
+        } else if (gameSession.state == GameState.ENDED){
+            myGdxGame.setScreen(myGdxGame.menuScreen);
         }
         draw();
     }
@@ -132,7 +136,7 @@ public class GameScreen extends ScreenAdapter {
                     if (continueButton.isHit(myGdxGame.touch.x,myGdxGame.touch.y))
                         gameSession.resumeGame();
                     if (homeButton.isHit(myGdxGame.touch.x,myGdxGame.touch.y))
-                        myGdxGame.setScreen(myGdxGame.menuScreen);
+                        gameSession.state=GameState.ENDED;//заглушка
                     break;
             }
 
@@ -164,7 +168,11 @@ public class GameScreen extends ScreenAdapter {
     }
     private void updateTrash() {
         for (int i=0;i<trashArray.size();i++) {
-            if (!trashArray.get(i).isInFrame()||!trashArray.get(i).isAlive()) {
+            boolean hasToBeDestroyed=!trashArray.get(i).isInFrame()||!trashArray.get(i).isAlive();
+            if (!trashArray.get(i).isAlive()) {
+                if (myGdxGame.audioManager.isSoundOn) myGdxGame.audioManager.explosionSound.play(0.2f);
+            }
+            if (hasToBeDestroyed) {
                 MyGdxGame.world.destroyBody(trashArray.get(i).body);
                 trashArray.remove(i--);
             }

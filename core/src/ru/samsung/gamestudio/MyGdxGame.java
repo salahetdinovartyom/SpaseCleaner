@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import ru.samsung.gamestudio.managers.AudioManager;
 import ru.samsung.gamestudio.screens.GameScreen;
 import ru.samsung.gamestudio.screens.MenuScreen;
+import ru.samsung.gamestudio.screens.SettingsScreen;
 
 public class MyGdxGame extends Game {
 	public SpriteBatch batch;
@@ -24,6 +25,7 @@ public class MyGdxGame extends Game {
     public static World world;
     public GameScreen gameScreen;
     public MenuScreen menuScreen;
+    public SettingsScreen settingsScreen;
     static float accumulator=0f;
     public Vector3 touch;
     public BitmapFont commonWhiteFont;
@@ -49,6 +51,7 @@ public class MyGdxGame extends Game {
 
         gameScreen=new GameScreen(this);
         menuScreen=new MenuScreen(this);
+        settingsScreen=new SettingsScreen(this);
         setScreen(menuScreen);
 	}
 	
