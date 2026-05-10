@@ -48,15 +48,15 @@ public class GameSession {
         return score;
     }
     public void endGame() {
-        updateScore();
         state=GameState.ENDED;
+        updateScore();
         ArrayList<Integer> recordsTable= MemoryManager.loadRecordsTable();
         if (recordsTable==null) recordsTable=new ArrayList<>();
         int foundIdx=0;
         for (;foundIdx<recordsTable.size();foundIdx++) {
-            if (recordsTable.get(foundIdx)<getScore()) break;
+            if (recordsTable.get(foundIdx)<getScore()+100) break;
         }
-        recordsTable.add(foundIdx,getScore());
+        recordsTable.add(foundIdx,getScore()+100);
         MemoryManager.saveTableOfRecords(recordsTable);
     }
 
