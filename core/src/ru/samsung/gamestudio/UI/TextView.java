@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class TextView extends View {
-    private BitmapFont font;
+    protected BitmapFont font;
 
-    private String text;
+    protected String text;
 
     public TextView(BitmapFont font, float x, float y) {
         super(x, y);
