@@ -14,7 +14,7 @@ public class GameSettings {
     //Мусоp
     public static final short TRASH_BIT = 1;
     public static final int TRASH_VELOSITY=20,TRASH_WIDTH=140,TRASH_HEIGHT=100;
-    public static final long STARTING_TRASH_APPEARANCE_COOL_DOWN=2000;
+    public static final long STARTING_TRASH_APPEARANCE_COOL_DOWN=1500;
     //Пуля
     public static final int BULLET_VELOSITY=200,SHOOTING_COOL_DOWN=1000,BULLET_WIDTH = 15,BULLET_HEIGHT = 45;
     public static final short BULLET_BIT = 4;

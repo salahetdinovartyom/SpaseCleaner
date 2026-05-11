@@ -223,5 +223,6 @@ public class GameScreen extends ScreenAdapter {
         );
         bulletArray.clear();
         gameSession.startGame();
+        gameSession.setScore(0);
     }
 }

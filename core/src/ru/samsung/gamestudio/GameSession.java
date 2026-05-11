@@ -15,7 +15,7 @@ public class GameSession {
     int destructedTrashNumber;
     public void startGame() {
         state=GameState.PLAYING;
-        score=0;
+        setScore(0);
         sessionStartTime=TimeUtils.millis();
         nextTrashSpawnTime=sessionStartTime+(long) (STARTING_TRASH_APPEARANCE_COOL_DOWN*getTrashPeriodCoolDown());
     }
@@ -26,8 +26,12 @@ public class GameSession {
     public void resumeGame() {
         state=GameState.PLAYING;
         sessionStartTime += TimeUtils.millis()-sessionPauseTime;
-
     }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     public boolean shouldSpawnTrash() {
         if (nextTrashSpawnTime<=TimeUtils.millis()) {
             nextTrashSpawnTime=TimeUtils.millis()+(long) (STARTING_TRASH_APPEARANCE_COOL_DOWN*getTrashPeriodCoolDown());
@@ -36,13 +40,13 @@ public class GameSession {
         return false;
     }
     private float getTrashPeriodCoolDown() {
-        return (float) Math.exp(-0.001*(TimeUtils.millis()-sessionStartTime)/1000);
+        return (float) Math.exp(-0.001*(TimeUtils.millis()-sessionStartTime)/100000);
     }
     public void destructionRegistration() {
         destructedTrashNumber+=1;
     }
     public void updateScore() {
-        score=(int) (TimeUtils.millis()-sessionStartTime)/100+destructedTrashNumber*100;
+        score=(int) (TimeUtils.millis()-sessionStartTime)/500+destructedTrashNumber*100;
     }
     public int getScore() {
         return score;
@@ -58,6 +62,7 @@ public class GameSession {
         }
         recordsTable.add(foundIdx,getScore()+100);
         MemoryManager.saveTableOfRecords(recordsTable);
+        setScore(0);
     }
 
 

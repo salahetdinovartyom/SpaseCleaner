@@ -28,7 +28,6 @@ public class MemoryManager {
         String tableInString=json.toJson(table);
         preferences.putString("recordTable",tableInString);
         preferences.flush();
-
     }
     public static ArrayList<Integer> loadRecordsTable() {
         if (!preferences.contains("recordTable")) return null;
