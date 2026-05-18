@@ -6,27 +6,19 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import ru.samsung.gamestudio.UI.RecordsListView;
 import ru.samsung.gamestudio.managers.ContactManager;
 import ru.samsung.gamestudio.GameSession;
 import ru.samsung.gamestudio.GameState;
 import ru.samsung.gamestudio.MyGdxGame;
-import ru.samsung.gamestudio.UI.ButtonView;
-import ru.samsung.gamestudio.UI.ImageView;
-import ru.samsung.gamestudio.UI.LiveView;
-import ru.samsung.gamestudio.UI.MovingBackgroundView;
-import ru.samsung.gamestudio.UI.TextView;
+import ru.samsung.gamestudio.UI.*;
 import ru.samsung.gamestudio.managers.MemoryManager;
-import ru.samsung.gamestudio.objects.BulletObject;
-import ru.samsung.gamestudio.objects.ShipObject;
-import ru.samsung.gamestudio.objects.TrashObject;
+import ru.samsung.gamestudio.objects.*;
 
 import static ru.samsung.gamestudio.GameResources.*;
 import static ru.samsung.gamestudio.GameSettings.*;
 
 import java.util.ArrayList;
-
-
+import java.util.Objects;
 public class GameScreen extends ScreenAdapter {
     MyGdxGame myGdxGame;
     ShipObject shipObject;
@@ -96,7 +88,7 @@ public class GameScreen extends ScreenAdapter {
             }
             if (!shipObject.isAlive()) {
                 gameSession.endGame();
-                recordsListView.setRecords(MemoryManager.loadRecordsTable());
+                recordsListView.setRecords(Objects.requireNonNull(MemoryManager.loadRecordsTable()));
             }
 
             updateTrash();
