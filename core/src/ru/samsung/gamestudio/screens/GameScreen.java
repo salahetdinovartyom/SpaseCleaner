@@ -27,16 +27,12 @@ public class GameScreen extends ScreenAdapter {
     ArrayList<TrashObject> trashArray;
     ArrayList<BulletObject> bulletArray;
     MovingBackgroundView backgroundView;
-    ImageView topBlackoutView;
+    ImageView topBlackoutView, fullBlackoutView;
     LiveView liveView;
-    TextView scoreTextView;
-    ButtonView pauseButton;
-    ImageView fullBlackoutView;
-    ButtonView homeButton,continueButton;
-    TextView pauseTextView;
-    TextView recordsTextView;
+    TextView scoreTextView, pauseTextView, recordsTextView;
+    ButtonView pauseButton, homeButton,continueButton, homeButton2;
     RecordsListView recordsListView;
-    ButtonView homeButton2;
+
     public GameScreen(MyGdxGame myGdxGame) {
         this.myGdxGame=myGdxGame;
         gameSession=new GameSession();
@@ -63,14 +59,12 @@ public class GameScreen extends ScreenAdapter {
     }
 
     @Override
-    public void show () {
-        restartGame();
-    }
+    public void show () {restartGame();}
 
     @Override
     public void render(float delta) {
-
         handleInput();
+
         if (gameSession.state==GameState.PLAYING) {
 
             if (gameSession.shouldSpawnTrash()) {
@@ -78,6 +72,7 @@ public class GameScreen extends ScreenAdapter {
                         TRASH_IMG_PATH, MyGdxGame.world);
                 trashArray.add(trashObject);
             }
+
             if (shipObject.needToShoot()) {
                 BulletObject laserBullet = new BulletObject(shipObject.getX(), shipObject.getY() + shipObject.height / 2,
                         BULLET_WIDTH, BULLET_HEIGHT,
@@ -86,6 +81,7 @@ public class GameScreen extends ScreenAdapter {
 
                 if (myGdxGame.audioManager.isSoundOn) myGdxGame.audioManager.shootSound.play();
             }
+
             if (!shipObject.isAlive()) {
                 gameSession.endGame();
                 recordsListView.setRecords(Objects.requireNonNull(MemoryManager.loadRecordsTable()));
@@ -169,7 +165,7 @@ public class GameScreen extends ScreenAdapter {
             pauseTextView.draw(myGdxGame.batch);
             homeButton.draw(myGdxGame.batch);
             continueButton.draw(myGdxGame.batch);
-        }else if (gameSession.state==GameState.ENDED) {
+        } else if (gameSession.state==GameState.ENDED) {
             fullBlackoutView.draw(myGdxGame.batch);
             recordsTextView.draw(myGdxGame.batch);
             recordsListView.draw(myGdxGame.batch);
@@ -204,9 +200,8 @@ public class GameScreen extends ScreenAdapter {
             MyGdxGame.world.destroyBody(trashArray.get(i).body);
             trashArray.remove(i--);
         }
-        if (shipObject!=null) {
-            MyGdxGame.world.destroyBody(shipObject.body);
-        }
+        if (shipObject!=null) MyGdxGame.world.destroyBody(shipObject.body);
+
         shipObject = new ShipObject(
                 SCREEN_WIDTH / 2, 150,
                 SHIP_WIDTH, SHIP_HEIGHT,
