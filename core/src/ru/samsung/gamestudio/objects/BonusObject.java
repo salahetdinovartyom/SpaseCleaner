@@ -25,7 +25,8 @@ public class BonusObject extends GameObject{
     public boolean isInFrame() {return getY()+height/2>0||getY()+height/2<SCREEN_HEIGHT;}
     public void hit() {
         livesLeft--;
-        if (GameScreen.shipObject.livesLeft<=2) GameScreen.shipObject.livesLeft++;
+        if (GameScreen.shipObject.livesLeft==2) GameScreen.shipObject.livesLeft=3;
+        else if (GameScreen.shipObject.livesLeft==1) GameScreen.shipObject.livesLeft=2;
         if (!GameScreen.shipObject.isBig) {
             GameScreen.shipObject.textureX2();
             GameScreen.shipObject.circleShape.setRadius(Math.max(width,height)*SCALE/2f);
