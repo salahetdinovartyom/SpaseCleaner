@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 public class GameScreen extends ScreenAdapter {
     MyGdxGame myGdxGame;
-    ShipObject shipObject;
+    public static ShipObject shipObject;
     GameSession gameSession;
     ContactManager contactManager;
     ArrayList<TrashObject> trashArray;
@@ -32,6 +32,7 @@ public class GameScreen extends ScreenAdapter {
     TextView scoreTextView, pauseTextView, recordsTextView;
     ButtonView pauseButton, homeButton,continueButton, homeButton2;
     RecordsListView recordsListView;
+    ArrayList<BonusObject> bonusArray;
 
     public GameScreen(MyGdxGame myGdxGame) {
         this.myGdxGame=myGdxGame;
@@ -56,6 +57,7 @@ public class GameScreen extends ScreenAdapter {
         recordsTextView=new TextView(myGdxGame.largeWhiteFont,206,842,"Last records");
         recordsListView=new RecordsListView(myGdxGame.commonWhiteFont,690);
         homeButton2=new ButtonView(280,365,160,70,myGdxGame.commonBlackFont,BUTTON_BACKGROUND_SHORT_IMG_PATH,"Home");
+        bonusArray=new ArrayList<>();
     }
 
     @Override
@@ -81,6 +83,10 @@ public class GameScreen extends ScreenAdapter {
 
                 if (myGdxGame.audioManager.isSoundOn) myGdxGame.audioManager.shootSound.play();
             }
+            if (shipObject.needToBonus()) {
+                BonusObject bonus = new BonusObject(BULLET_WIDTH, BULLET_HEIGHT, BULLET_IMG_PATH, MyGdxGame.world);
+                bonusArray.add(bonus);
+            }
 
             if (!shipObject.isAlive()) {
                 gameSession.endGame();
@@ -89,6 +95,7 @@ public class GameScreen extends ScreenAdapter {
 
             updateTrash();
             updateBullets();
+            updateBonus();
             backgroundView.move();
             gameSession.updateScore();
             scoreTextView.setText("Score: " + gameSession.getScore());
@@ -104,6 +111,7 @@ public class GameScreen extends ScreenAdapter {
         shipObject.dispose();
         for (TrashObject trash : trashArray) trash.dispose();
         for (BulletObject bullet : bulletArray) bullet.dispose();
+        for (BonusObject bonusObject : bonusArray) bonusObject.dispose();
         backgroundView.dispose();
         topBlackoutView.dispose();
         backgroundView.dispose();
@@ -156,6 +164,7 @@ public class GameScreen extends ScreenAdapter {
         for (TrashObject trash : trashArray) trash.draw(myGdxGame.batch);
         shipObject.draw(myGdxGame.batch);
         for (BulletObject bullet : bulletArray) bullet.draw(myGdxGame.batch);
+        for (BonusObject bonusObject : bonusArray) bonusObject.draw(myGdxGame.batch);
         topBlackoutView.draw(myGdxGame.batch);
         scoreTextView.draw(myGdxGame.batch);
         liveView.draw(myGdxGame.batch);
@@ -176,8 +185,8 @@ public class GameScreen extends ScreenAdapter {
     }
     private void updateTrash() {
         for (int i=0;i<trashArray.size();i++) {
-            boolean hasToBeDestroyed=!trashArray.get(i).isInFrame()||!trashArray.get(i).isAlive();
-            if (!trashArray.get(i).isAlive()) {
+            boolean hasToBeDestroyed=!trashArray.get(i).isInFrame()|| trashArray.get(i).isNotAlive();
+            if (trashArray.get(i).isNotAlive()) {
                 gameSession.destructionRegistration();
                 if (myGdxGame.audioManager.isSoundOn) myGdxGame.audioManager.explosionSound.play(0.2f);
             }
@@ -192,6 +201,16 @@ public class GameScreen extends ScreenAdapter {
             if (bulletArray.get(i).hasToBeDestroyed()) {
                 MyGdxGame.world.destroyBody(bulletArray.get(i).body);
                 bulletArray.remove(i--);
+            }
+        }
+    }
+    private void updateBonus() {
+        for (int i=0;i<bonusArray.size();i++) {
+            boolean hasToBeDestroyed=!bonusArray.get(i).isInFrame()|| bonusArray.get(i).isNotAlive();
+            if (hasToBeDestroyed) {
+                MyGdxGame.world.destroyBody(bonusArray.get(i).body);
+                bonusArray.remove(i--);
+                for (int j=0;j<bonusArray.size();j++) {bonusArray.get(j).hit();}
             }
         }
     }

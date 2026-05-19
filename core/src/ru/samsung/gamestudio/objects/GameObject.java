@@ -13,6 +13,8 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class GameObject {
     public int width,height;
+    public CircleShape circleShape;
+
     public Body body;
     Texture texture;
     public short cBits;
@@ -47,7 +49,7 @@ public class GameObject {
         def.fixedRotation=true;
         Body body= world.createBody(def);
 
-        CircleShape circleShape=new CircleShape();
+        circleShape=new CircleShape();
         circleShape.setRadius(Math.max(width,height)*SCALE/2f);
 
         FixtureDef fixtureDef=new FixtureDef();

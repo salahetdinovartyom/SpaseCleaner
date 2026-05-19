@@ -10,7 +10,9 @@ import static ru.samsung.gamestudio.GameSettings.*;
 
 public class ShipObject extends GameObject{
     long lastShotTime;
+    long lastBonusTime;
     int livesLeft;
+    public boolean isBig;
 
     public int getLiveLeft() {
         return livesLeft;
@@ -19,6 +21,7 @@ public class ShipObject extends GameObject{
         super(texturePath, x, y, width, height, SHIP_BIT, world);
         body.setLinearDamping(15);
         livesLeft=3;
+        isBig=false;
     }
 
     private void putInFrame() {
@@ -51,9 +54,24 @@ public class ShipObject extends GameObject{
         }
         return false;
     }
+    public boolean needToBonus() {
+        if (TimeUtils.millis()-lastBonusTime>=BONUS_COOL_DOWN) {
+            lastBonusTime=TimeUtils.millis();
+            return true;
+        }
+        return false;
+    }
     @Override
-    public void hit() {livesLeft--;}
+    public void hit() {livesLeft--;textureD2();isBig=false;}
 
     public boolean isAlive() {return livesLeft>0;}
+    public void textureD2() {
+        height/=2;
+        width/=2;
+    }
+    public void textureX2() {
+        height*=2;
+        width*=2;
+    }
 
 }

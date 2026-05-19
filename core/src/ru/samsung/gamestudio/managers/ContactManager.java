@@ -28,6 +28,9 @@ public class ContactManager {
                     // поэтому вместо того огромного куска кода можно использовать это условие.
                     ((GameObject) fixA.getUserData()).hit();
                     ((GameObject) fixB.getUserData()).hit();
+                } else if (cDef+cDef2==BONUS_BIT+SHIP_BIT) {
+                    if (cDef==SHIP_BIT) ((GameObject) fixB.getUserData()).hit();
+                    else ((GameObject) fixA.getUserData()).hit();
                 }
             }
 

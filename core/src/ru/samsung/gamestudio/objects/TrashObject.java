@@ -19,11 +19,8 @@ public class TrashObject extends GameObject{
         body.setLinearVelocity(new Vector2(0,-TRASH_VELOSITY));
         livesLeft=1;
     }
-    public boolean isInFrame() {
-        return getY()+height/2>0;
-    }
+    public boolean isInFrame() {return getY()+height/2>0;}
     @Override
     public void hit() {livesLeft--;}
-
-    public boolean isAlive() {return livesLeft>0;}
+    public boolean isNotAlive() {return livesLeft <= 0;}
 }
