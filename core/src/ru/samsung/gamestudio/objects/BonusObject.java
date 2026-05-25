@@ -10,6 +10,7 @@ import ru.samsung.gamestudio.screens.GameScreen;
 
 public class BonusObject extends GameObject{
     private int livesLeft;
+    private boolean isUsed;
     private static final int paddingHorizontal=30;
     public BonusObject (int width, int height, String texturePath, World world) {
         super(texturePath,
@@ -20,13 +21,17 @@ public class BonusObject extends GameObject{
         );
         body.setLinearVelocity(new Vector2(0,-TRASH_VELOSITY));
         livesLeft=1;
+        isUsed=false;
 
     }
     public boolean isInFrame() {return getY()+height/2>0||getY()+height/2<SCREEN_HEIGHT;}
     public void hit() {
         livesLeft--;
-        if (GameScreen.shipObject.livesLeft==2) GameScreen.shipObject.livesLeft=3;
-        else if (GameScreen.shipObject.livesLeft==1) GameScreen.shipObject.livesLeft=2;
+        if (!isUsed) {
+            if (GameScreen.shipObject.livesLeft == 2) GameScreen.shipObject.livesLeft = 3;
+            else if (GameScreen.shipObject.livesLeft==1) GameScreen.shipObject.livesLeft=2;
+            isUsed=true;
+        }
         if (!GameScreen.shipObject.isBig) {
             GameScreen.shipObject.textureX2();
             GameScreen.shipObject.circleShape.setRadius(Math.max(width,height)*SCALE/2f);
