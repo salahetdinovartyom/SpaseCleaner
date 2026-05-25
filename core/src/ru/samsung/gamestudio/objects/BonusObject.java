@@ -28,8 +28,7 @@ public class BonusObject extends GameObject{
     public void hit() {
         livesLeft--;
         if (!isUsed) {
-            if (GameScreen.shipObject.livesLeft == 2) GameScreen.shipObject.livesLeft = 3;
-            else if (GameScreen.shipObject.livesLeft==1) GameScreen.shipObject.livesLeft=2;
+            GameScreen.shipObject.livesLeft++;
             isUsed=true;
         }
         if (!GameScreen.shipObject.isBig) {
